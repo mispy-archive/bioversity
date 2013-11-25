@@ -18,7 +18,7 @@ LONG = {
     "humans" => "for their mysterious ways",
     "stars" => "for their bolometric magnitudes",
     "science-fiction" => "for its inspiring tales"
-   }.map { |k,v| k + " " + v }
+}.map { |k,v| k + " " + v }
 
 def generate(max_length)
   terminator = "procedural generation" 
@@ -31,25 +31,25 @@ def generate(max_length)
   bio = "Reclusive programmer. Likes #{shorts.pop}"
 
   while bio.length < (max_length - length_tolerance)
-	next_short = shorts.pop
+  next_short = shorts.pop
 
-	attempt = "#{bio}, #{next_short}, #{next_long}, and #{terminator}."
+  attempt = "#{bio}, #{next_short}, #{next_long}, and #{terminator}."
 
-	if attempt.length > max_length
-	  next
-	elsif attempt.length > max_length - length_tolerance
-	  return attempt
-	else
-	  bio += ", #{next_short}"
-	end
+  if attempt.length > max_length
+    next
+  elsif attempt.length > max_length - length_tolerance
+    return attempt
+  else
+    bio += ", #{next_short}"
+  end
   end
 end
 
 Twitter.configure do |config|
   config.consumer_key = ""
-	config.consumer_secret = ""
-	config.oauth_token = ""
-	config.oauth_token_secret = ""
+  config.consumer_secret = ""
+  config.oauth_token = ""
+  config.oauth_token_secret = ""
 end
 
 client = Twitter::Client.new
