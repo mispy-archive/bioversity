@@ -1,0 +1,58 @@
+#!/usr/bin/env ruby
+# coding: utf-8
+
+require 'twitter'
+
+SHORT = ["science", "technology", "kittens", "hugs", "transhumanism", "rationality", "agnostic atheism", "Pokémon", "coding", "randomness", "heterogeneity", "open source", "web development", "Yoko Kanno", "evolution", "closures", "lazy evaluation", "anime", "databases", "data visualization", "Linux", "biology", "statistics", "plushies", "Ruby", "CoffeeScript", "cuteness", "artists", "immortalism", "ORMs", "puns", "fiction", "cleverness", "skepticism", "ambiguity", "abstraction", "artificial intelligence", "dreams", "sugar gliders", "analysis", "equality", "natural language processing", "social psychology", "indie gamedev", "astronomy", "stars", "galaxies", "kleptoplasty", "starlight", "silliness", "ethics", "roguelikes", "education", "open access", "gender equality"]
+
+LONG = { 
+    "kittens" => "for their tiny paws",
+    "bees" => "for their eusocial nature",
+    "evolution" => "for its clever mechanisms",
+    "closures" => "for their lexical scopes",
+    "Linux" => "for its command line tools",
+    "books" => "for their ancient wisdom",
+    "databases" => "for their optimizations",
+    "Pokémon" => "for their diverse morphologies",
+    "artists" => "for their cute creations",
+    "humans" => "for their mysterious ways",
+    "stars" => "for their bolometric magnitudes",
+    "science-fiction" => "for its inspiring tales"
+   }.map { |k,v| k + " " + v }
+
+def generate(max_length)
+  terminator = "procedural generation" 
+  length_tolerance = 10
+
+  longs = LONG.shuffle
+  next_long = longs.last
+  shorts = SHORT.shuffle.reject { |word| next_long.include?(word) }
+
+  bio = "Reclusive programmer. Likes #{shorts.pop}"
+
+  while bio.length < (max_length - length_tolerance)
+	next_short = shorts.pop
+
+	attempt = "#{bio}, #{next_short}, #{next_long}, and #{terminator}."
+
+	if attempt.length > max_length
+	  next
+	elsif attempt.length > max_length - length_tolerance
+	  return attempt
+	else
+	  bio += ", #{next_short}"
+	end
+  end
+end
+
+Twitter.configure do |config|
+  config.consumer_key = ""
+	config.consumer_secret = ""
+	config.oauth_token = ""
+	config.oauth_token_secret = ""
+end
+
+client = Twitter::Client.new
+
+desc = generate(140)
+client.update_profile(:description => desc)
